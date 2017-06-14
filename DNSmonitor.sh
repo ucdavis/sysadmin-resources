@@ -41,8 +41,8 @@ do
 	for i in "${dnsServers[@]}"
 	do
 		result=`dig +short ${sites[$siteIndex]} "$i"`;
-		echo result=$result;
-		echo answer=${answers[$siteIndex]};
+#		echo result=$result;
+#		echo answer=${answers[$siteIndex]};
 		if [[ $result != ${answers[$siteIndex]} ]];
 		then
 			echo "fail";
