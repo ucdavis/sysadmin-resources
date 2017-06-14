@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # Script created by: Brian Rose
 # Email: BrianCanFixIT@Gmail.com
@@ -10,6 +10,9 @@ adminEmail="bjrose@ucdavis.edu"
 # Sites to monitor
 sites[0]="vpn.dss.ucdavis.edu"
 sites[1]="jss.ucdavis.edu"
+answers[0]="169.237.160.75"
+answers[1]="agdt-jss-01.ucdavis.edu.
+128.120.46.162"
 
 # DNS servers to test lookups against
 dnsServers[0]="169.237.160.10" #infoblox
@@ -37,9 +40,12 @@ while [ "$siteIndex" -lt "$siteCount" ]
 do
 	for i in "${dnsServers[@]}"
 	do
-		nslookup ${sites[$siteIndex]} "$i" >> dnslookuplog.txt
-		if cat dnslookuplog.txt | grep -q NXDOMAIN
+		result=`dig +short ${sites[$siteIndex]} "$i"`;
+		echo result=$result;
+		echo answer=${answers[$siteIndex]};
+		if [[ $result != ${answers[$siteIndex]} ]];
 		then
+			echo "fail";
 			fulldate=`date`
 			echo "$fulldate\t\c" >> dnserrorlog.txt
 			echo "$i\twas not able to resolve the following host:\t${sites[$siteIndex]}." >> dnserrorlog.txt
